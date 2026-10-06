@@ -16,19 +16,18 @@ header{display:flex;align-items:center;justify-content:space-between;gap:24px;fo
 @media(max-width:600px){.identity h1{font-size:clamp(30px,9vw,50px);padding:12px;letter-spacing:-.055em}.identity h1 span{display:block}.home-nav{bottom:28px;gap:28px;font-size:11px}.rats{inset:10px 10px 82px}.rat{width:38px;height:38px}.subpage{padding:26px 24px}.note{padding:75px 0 100px}.note p,.email{font-size:12px}.desktop-break{display:none}}
 @media(prefers-reduced-motion:reduce){.rat{will-change:auto}}
 
-/* The wordmark moves between its central and corner positions on navigation. */
-@view-transition{navigation:auto}
-.identity h1,.wordmark{view-transition-name:brand}
-.note,.home-nav{animation:arrive .48s cubic-bezier(.22,1,.36,1) both}
-::view-transition-group(brand){animation-duration:.55s;animation-timing-function:cubic-bezier(.22,1,.36,1)}
-::view-transition-old(root){animation:depart .22s ease-in both}
-::view-transition-new(root){animation:arrive .42s cubic-bezier(.22,1,.36,1) both}
-::view-transition-old(brand),::view-transition-new(brand){height:100%;mix-blend-mode:normal}
-@keyframes depart{to{opacity:0;transform:translateY(-10px);filter:blur(2px)}}
-@keyframes arrive{from{opacity:0;transform:translateY(14px);filter:blur(3px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
-@media(prefers-reduced-motion:reduce){
-  @view-transition{navigation:none}
-  .note,.home-nav{animation:none}
-  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}
-}
 
+.spawn-rat{appearance:none;border:0;background:transparent;color:inherit;font:inherit;letter-spacing:inherit;line-height:inherit;padding:0;cursor:pointer;pointer-events:auto}
+.spawn-rat:focus-visible{outline:2px solid #171717;outline-offset:10px}
+.rat img{width:100%;height:100%;object-fit:contain}
+.rat.new-rat img{animation:hatch .48s cubic-bezier(.2,.9,.3,1.3) both}
+@keyframes hatch{0%{opacity:0;transform:scale(.05) rotate(-30deg)}65%{opacity:1;transform:scale(1.24) rotate(8deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+.note,.home-nav{animation:arrive .4s ease-out both}
+.leaving .identity,.leaving .home-nav,.leaving .note,.leaving header,.leaving .rats{animation:depart .32s ease-in both;pointer-events:none}
+.navigation-rat{position:fixed;left:-85px;top:calc(50% - 32px);width:64px;height:64px;z-index:20;pointer-events:none;animation:scurry .58s cubic-bezier(.45,0,.55,1) both}
+.navigation-rat img{width:100%;height:100%;filter:grayscale(1) brightness(0);animation:stride .09s ease-in-out infinite alternate}
+@keyframes scurry{from{transform:translateX(0)}to{transform:translateX(calc(100vw + 170px))}}
+@keyframes stride{from{transform:rotate(-95deg) translateX(-3px)}to{transform:rotate(-85deg) translateX(3px)}}
+@keyframes depart{to{opacity:0;transform:translateY(-8px);filter:blur(2px)}}
+@keyframes arrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.note,.home-nav,.rat.new-rat img{animation:none}.navigation-rat{display:none}}
