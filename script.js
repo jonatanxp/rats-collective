@@ -26,9 +26,10 @@ if (field) {
   function addRat(preferred,animate=false){
     const p=position(preferred);if(!p)return;
     const el=document.createElement('span'),img=document.createElement('img');
-    el.className='rat'+(animate?' new-rat':'');img.src='assets/rat-original.png';img.alt='';img.draggable=false;
+    el.className='rat';img.src='assets/rat-original.png';img.alt='';img.draggable=false;
     el.appendChild(img);field.appendChild(el);
     const r={el,x:p.x,y:p.y,vx:0,vy:0,angle:Math.random()*360};rats.push(r);paint(r);
+    if(animate)img.decode().then(()=>el.classList.add('new-rat')).catch(()=>{});
   }
   function measure(){width=field.clientWidth;height=field.clientHeight;size=matchMedia('(max-width:600px)').matches?38:48;}
   function layout(){
@@ -79,10 +80,19 @@ document.addEventListener('click',event=>{
   if(url.origin!==location.origin||url.pathname===location.pathname||reduced.matches)return;
   event.preventDefault();if(navigating)return;navigating=true;
   const runner=document.createElement('div'),img=document.createElement('img');
-  runner.className='navigation-rat';runner.setAttribute('aria-hidden','true');
+  runner.className='navigation-rat'+(url.pathname==='/'?' returning':'');runner.setAttribute('aria-hidden','true');
   img.src=new URL('assets/rat-original.png',scriptUrl).href;img.alt='';runner.appendChild(img);
-  document.body.appendChild(runner);document.body.classList.add('leaving');
-  setTimeout(()=>location.assign(url.href),590);
+  let finished=false;
+  const finish=()=>{if(finished)return;finished=true;location.assign(url.href);};
+  const start=()=>{
+    if(finished)return;
+    document.body.appendChild(runner);document.body.classList.add('leaving');
+    runner.addEventListener('animationend',e=>{if(e.target===runner)finish();});
+    setTimeout(finish,1200);
+  };
+  // Wait for the image before starting, especially on slower mobile connections.
+  img.decode().then(start).catch(finish);
+  setTimeout(finish,2500);
 });
 window.addEventListener('pageshow',()=>{
   navigating=false;document.body.classList.remove('leaving');document.querySelector('.navigation-rat')?.remove();

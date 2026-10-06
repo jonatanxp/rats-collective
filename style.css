@@ -24,10 +24,18 @@ header{display:flex;align-items:center;justify-content:space-between;gap:24px;fo
 @keyframes hatch{0%{opacity:0;transform:scale(.05) rotate(-30deg)}65%{opacity:1;transform:scale(1.24) rotate(8deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
 .note,.home-nav{animation:arrive .4s ease-out both}
 .leaving .identity,.leaving .home-nav,.leaving .note,.leaving header,.leaving .rats{animation:depart .32s ease-in both;pointer-events:none}
-.navigation-rat{position:fixed;left:-85px;top:calc(50% - 32px);width:64px;height:64px;z-index:20;pointer-events:none;animation:scurry .58s cubic-bezier(.45,0,.55,1) both}
+.navigation-rat{position:fixed;left:-85px;top:calc(50% - 32px);width:64px;height:64px;z-index:20;pointer-events:none;animation:scurry .8s cubic-bezier(.45,0,.55,1) both}
 .navigation-rat img{width:100%;height:100%;filter:grayscale(1) brightness(0);animation:stride .09s ease-in-out infinite alternate}
 @keyframes scurry{from{transform:translateX(0)}to{transform:translateX(calc(100vw + 170px))}}
 @keyframes stride{from{transform:rotate(-95deg) translateX(-3px)}to{transform:rotate(-85deg) translateX(3px)}}
 @keyframes depart{to{opacity:0;transform:translateY(-8px);filter:blur(2px)}}
 @keyframes arrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.note,.home-nav,.rat.new-rat img{animation:none}.navigation-rat{display:none}}
+
+.spawn-rat{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.spawn-rat:focus:not(:focus-visible){outline:none}
+.navigation-rat.returning{left:auto;right:-85px;animation-name:scurry-back}
+.navigation-rat.returning img{animation-name:stride-back}
+@keyframes scurry-back{from{transform:translateX(0)}to{transform:translateX(calc(-100vw - 170px))}}
+@keyframes stride-back{from{transform:rotate(85deg) translateX(-3px)}to{transform:rotate(95deg) translateX(3px)}}
+@media(pointer:coarse){.navigation-rat{animation-duration:.95s}}

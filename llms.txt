@@ -1,9 +1,17 @@
 # Rats Collective
 
-> TikTok sound promotion, music campaigns and page management.
+> Rats Collective: TikTok sound promotion, artist management, UGC campaigns, influencer and creator management, and fan page services.
 
-- [Contact](https://ratscollective.com/contact/): Campaign inquiries.
-- [Artists](https://ratscollective.com/artists/): Promotion and potential management inquiries.
-- [Instagram](https://www.instagram.com/ratscollective/)
+## Services
+- TikTok sound promotion
+- Artist management
+- UGC campaign management
+- Influencer and creator management
+- Fan page services
 
+## Contact
 Email: contact@ratscollective.com
+
+- [Contact](https://ratscollective.com/contact/)
+- [Artists](https://ratscollective.com/artists/)
+- [Instagram](https://www.instagram.com/ratscollective/)
