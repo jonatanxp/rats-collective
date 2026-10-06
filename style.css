@@ -39,3 +39,17 @@ header{display:flex;align-items:center;justify-content:space-between;gap:24px;fo
 @keyframes scurry-back{from{transform:translateX(0)}to{transform:translateX(calc(-100vw - 170px))}}
 @keyframes stride-back{from{transform:rotate(85deg) translateX(-3px)}to{transform:rotate(95deg) translateX(3px)}}
 @media(pointer:coarse){.navigation-rat{animation-duration:.95s}}
+
+.services-note{padding:58px 0 70px}
+.service-list{margin:-8px 0 26px}
+.service-list details{border-bottom:1px solid #e7e7e7;padding:13px 0;scroll-margin-top:30px}
+.service-list summary{font-size:13px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:15px}
+.service-list summary::-webkit-details-marker{display:none}
+.service-list summary::after{content:'+';flex-shrink:0}
+.service-list details[open] summary::after{content:'−'}
+.service-list summary:focus-visible{outline:2px solid #171717;outline-offset:5px}
+.service-list details p{font-size:12px;line-height:1.8;margin:14px 0 4px;color:#454545}
+.services-note .service-context{font-size:11px;line-height:1.9;margin-bottom:25px}
+.services-note .artist-inquiry{font-size:11px;margin:26px 0 0}
+.artist-inquiry a{text-decoration:underline;text-underline-offset:4px}
+@media(max-width:600px){.services-note{padding:48px 0}.service-list summary{font-size:12px}}
