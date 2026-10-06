@@ -1,12 +1,46 @@
-document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().getFullYear());
-const field=document.querySelector('.playground');
-if(field){
- const rat=field.querySelector('.runner'),button=field.querySelector('button'),motion=matchMedia('(prefers-reduced-motion: reduce)');
- let paused=motion.matches,x=field.clientWidth*.7,y=40,vx=25,vy=10,pointer=null,last=0,frame;
- function paint(){rat.style.transform=`translate(${x}px,${y}px) rotate(${Math.sin(x/60)*9}deg)`;}
- function bounds(){x=Math.max(5,Math.min(field.clientWidth-71,x));y=Math.max(5,Math.min(field.clientHeight-112,y));paint();}
- function state(){button.textContent=paused?'Resume motion':'Pause motion';button.setAttribute('aria-pressed',String(paused));}
- function tick(now){const dt=Math.min((now-last)/1000||0,.035);last=now;if(!paused&&!document.hidden){if(pointer){let dx=x+33-pointer.x,dy=y+41-pointer.y,d=Math.hypot(dx,dy);if(d<160){if(d<1){dx=1;dy=1;d=1.4;}vx=dx/d*260;vy=dy/d*180;}}x+=vx*dt;y+=vy*dt;vx*=Math.pow(.99,dt*60);vy*=Math.pow(.99,dt*60);if(Math.abs(vx)<24)vx=vx<0?-24:24;if(x<=5||x>=field.clientWidth-71)vx*=-1;if(y<=5||y>=field.clientHeight-112)vy*=-1;bounds();}frame=requestAnimationFrame(tick);}
- field.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'){const r=field.getBoundingClientRect();pointer={x:e.clientX-r.left,y:e.clientY-r.top};}});field.addEventListener('pointerleave',()=>pointer=null);
- button.addEventListener('click',()=>{paused=!paused;state();});motion.addEventListener('change',e=>{paused=e.matches;state();});window.addEventListener('resize',bounds);bounds();state();frame=requestAnimationFrame(tick);
+const field = document.querySelector('.rats');
+if (field) {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const starts = [[.10,.15],[.42,.08],[.79,.18],[.91,.47],[.13,.65],[.34,.85],[.68,.78],[.86,.92],[.03,.39]];
+  const rats = starts.map(([px,py],i) => {
+    const el=document.createElement('img');
+    el.src='assets/rat-original.png'; el.alt=''; el.className='rat'; el.draggable=false;
+    field.appendChild(el);
+    return {el,px,py,x:0,y:0,vx:0,vy:0,angle:(i*67)%360};
+  });
+  let width=0,height=0,size=48,frame=0,last=0,pointer=null;
+  function paint(r){r.el.style.transform='translate('+r.x+'px,'+r.y+'px) rotate('+r.angle+'deg)';}
+  function layout(){
+    width=field.clientWidth; height=field.clientHeight;size=rats[0].el.clientWidth;
+    rats.forEach(r=>{r.x=r.px*Math.max(0,width-size);r.y=r.py*Math.max(0,height-size);r.vx=r.vy=0;paint(r);});
+  }
+  function tick(now){
+    frame=0;
+    if(reduced.matches||document.hidden)return;
+    const dt=Math.min((now-last)/1000||.016,.035);last=now;let moving=false;
+    for(const r of rats){
+      r.x+=r.vx*dt;r.y+=r.vy*dt;
+      if(r.x<0){r.x=0;r.vx=Math.abs(r.vx);}if(r.x>width-size){r.x=Math.max(0,width-size);r.vx=-Math.abs(r.vx);}
+      if(r.y<0){r.y=0;r.vy=Math.abs(r.vy);}if(r.y>height-size){r.y=Math.max(0,height-size);r.vy=-Math.abs(r.vy);}
+      const drag=Math.exp(-3.4*dt);r.vx*=drag;r.vy*=drag;
+      if(Math.hypot(r.vx,r.vy)>2){r.angle=Math.atan2(r.vy,r.vx)*180/Math.PI-90;moving=true;}else{r.vx=r.vy=0;}
+      paint(r);
+    }
+    if(moving)frame=requestAnimationFrame(tick);
+  }
+  function scatter(e){
+    if(reduced.matches)return;
+    const rect=field.getBoundingClientRect();pointer={x:e.clientX-rect.left,y:e.clientY-rect.top};
+    let moved=false;
+    for(const r of rats){let dx=r.x+size/2-pointer.x,dy=r.y+size/2-pointer.y;let d=Math.hypot(dx,dy);
+      if(d<155){if(d<1){dx=1;dy=-1;d=Math.SQRT2;}const speed=220+(155-d)*2;r.vx=dx/d*speed;r.vy=dy/d*speed;moved=true;}
+    }
+    if(moved&&!frame){last=performance.now();frame=requestAnimationFrame(tick);}
+  }
+  window.addEventListener('pointermove',scatter,{passive:true});
+  window.addEventListener('pointerdown',scatter,{passive:true});
+  window.addEventListener('resize',layout);
+  reduced.addEventListener('change',()=>{cancelAnimationFrame(frame);frame=0;layout();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}});
+  layout();
 }

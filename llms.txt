@@ -1,16 +1,9 @@
 # Rats Collective
 
-> Finland-registered marketing agency specializing in TikTok music marketing and sound promotion.
+> TikTok sound promotion, music campaigns and page management.
 
-## Services
-- TikTok sound promotion campaigns for artists, labels and music teams.
-- Campaign distribution through a network of approximately 20 accounts.
-- Social media page management for owned and third-party pages.
-- Conversations about potential artist management partnerships.
-
-## Pages
-- [Home](https://ratscollective.com/)
-- [For artists](https://ratscollective.com/artists/)
-- [Contact](https://ratscollective.com/contact/)
+- [Contact](https://ratscollective.com/contact/): Campaign inquiries.
+- [Artists](https://ratscollective.com/artists/): Promotion and potential management inquiries.
+- [Instagram](https://www.instagram.com/ratscollective/)
 
 Email: contact@ratscollective.com
