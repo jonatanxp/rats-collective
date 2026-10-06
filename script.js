@@ -1,12 +1,16 @@
 const field = document.querySelector('.rats');
 if (field) {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  const starts = [[.10,.15],[.42,.08],[.79,.18],[.91,.47],[.13,.65],[.34,.85],[.68,.78],[.86,.92],[.03,.39]];
+  // Jitter one rat inside each grid cell to vary the arrangement without clusters.
+  const starts = Array.from({length:9}, (_,i) => [
+    ((i % 3) + .12 + Math.random() * .76) / 3,
+    (Math.floor(i / 3) + .12 + Math.random() * .76) / 3
+  ]);
   const rats = starts.map(([px,py],i) => {
     const el=document.createElement('img');
     el.src='assets/rat-original.png'; el.alt=''; el.className='rat'; el.draggable=false;
     field.appendChild(el);
-    return {el,px,py,x:0,y:0,vx:0,vy:0,angle:(i*67)%360};
+    return {el,px,py,x:0,y:0,vx:0,vy:0,angle:Math.random()*360};
   });
   let width=0,height=0,size=48,frame=0,last=0,pointer=null;
   function paint(r){r.el.style.transform='translate('+r.x+'px,'+r.y+'px) rotate('+r.angle+'deg)';}
